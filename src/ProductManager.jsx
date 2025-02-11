@@ -61,13 +61,24 @@ const ProductManager = () => {
   };
 
   const calculatePrice = (basePrice) => {
-    const totalCost = basePrice + bottlePrice * 25 + stickerPrice * 25; // Multiply by 25
-    const finalPricePerKg = roundToNearestHalf(totalCost * 1.25); // Adding 25% profit margin and rounding
+    const totalCost = basePrice + bottlePrice * 25 + stickerPrice * 25;
+    const finalPricePerKg = roundToNearestHalf(totalCost * 1.25); // Adding 25% profit margin
 
-    const price40g = roundToNearestHalf((finalPricePerKg / 1000) * 40); // 40g with profit
-    const price90g = roundToNearestHalf((finalPricePerKg / 1000) * 90); // 90g with profit
+    // Prices with profit
+    const price40g = roundToNearestHalf((finalPricePerKg / 1000) * 40);
+    const price90g = roundToNearestHalf((finalPricePerKg / 1000) * 90);
 
-    return { price40g, price90g, finalPrice: finalPricePerKg };
+    // Prices without profit
+    const price50gNoProfit = roundToNearestHalf((basePrice / 1000) * 50);
+    const price90gNoProfit = roundToNearestHalf((basePrice / 1000) * 90);
+
+    return {
+      price40g,
+      price90g,
+      finalPrice: finalPricePerKg,
+      price50gNoProfit,
+      price90gNoProfit,
+    };
   };
 
   return (
@@ -148,17 +159,23 @@ const ProductManager = () => {
               <th>#</th>
               <th>المنتج</th>
               <th>سعر (1kg)</th>
-              <th>سعر (40g)</th> {/* Updated from 50g to 40g */}
-              <th>سعر (90g)</th> {/* Updated from 100g to 90g */}
+              <th>سعر (50g بدون ربح)</th> {/* New column */}
+              <th>سعر (90g بدون ربح)</th> {/* New column */}
+              <th>سعر (40g)</th>
+              <th>سعر (90g)</th>
               <th>السعر النهائي</th>
               <th>إجراء</th>
             </tr>
           </thead>
           <tbody>
             {products.map((product) => {
-              const { price40g, price90g, finalPrice } = calculatePrice(
-                product.pricePerKg
-              );
+              const {
+                price40g,
+                price90g,
+                finalPrice,
+                price50gNoProfit,
+                price90gNoProfit,
+              } = calculatePrice(product.pricePerKg);
               return (
                 <tr key={product.id}>
                   <td>{product.id}</td>
@@ -177,8 +194,10 @@ const ProductManager = () => {
                       }
                     />
                   </td>
-                  <td>{price40g.toFixed(2)}</td> {/* Updated */}
-                  <td>{price90g.toFixed(2)}</td> {/* Updated */}
+                  <td>{price50gNoProfit.toFixed(2)}</td> {/* New column */}
+                  <td>{price90gNoProfit.toFixed(2)}</td> {/* New column */}
+                  <td>{price40g.toFixed(2)}</td>
+                  <td>{price90g.toFixed(2)}</td>
                   <td>{finalPrice.toFixed(2)}</td>
                   <td>
                     <button
