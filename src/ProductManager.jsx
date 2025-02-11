@@ -15,7 +15,7 @@ const ProductManager = () => {
 
   const [products, setProducts] = useState(initialProduct || initialProducts);
   const [bottlePrice, setBottlePrice] = useState(2.25);
-  const [stickerPrice, setStickerPrice] = useState(100 / 35);
+  const [stickerPrice, setStickerPrice] = useState(20 / 35);
   const [newProductName, setNewProductName] = useState("");
   const [newProductPrice, setNewProductPrice] = useState("");
 
