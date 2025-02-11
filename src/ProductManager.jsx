@@ -57,11 +57,13 @@ const ProductManager = () => {
   };
 
   const calculatePrice = (basePrice) => {
-    const price50g = (basePrice / 1000) * 50;
-    const price100g = (basePrice / 1000) * 100;
-    const totalCost = basePrice + bottlePrice + stickerPrice;
-    const finalPrice = totalCost * 1.25;
-    return { price50g, price100g, finalPrice };
+    const totalCost = basePrice + bottlePrice + stickerPrice; // Base cost with additional costs
+    const finalPricePerKg = totalCost * 1.25; // Adding 25% profit margin
+
+    const price40g = (finalPricePerKg / 1000) * 40; // 40g with profit
+    const price90g = (finalPricePerKg / 1000) * 90; // 90g with profit
+
+    return { price40g, price90g, finalPrice: finalPricePerKg };
   };
 
   return (
@@ -136,57 +138,52 @@ const ProductManager = () => {
         className="table-responsive"
         style={{ overflowX: "auto" }}
       >
-        <table className="table table-striped">
-          <thead className="table-dark">
-            <tr>
-              <th>#</th>
-              <th>المنتج</th>
-              <th>سعر (1kg)</th>
-              <th>سعر (50g)</th>
-              <th>سعر (100g)</th>
-              <th>السعر النهائي</th>
-              <th>إجراء</th> {/* New column for actions */}
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => {
-              const { price50g, price100g, finalPrice } = calculatePrice(
-                product.pricePerKg
-              );
-              return (
-                <tr key={product.id}>
-                  <td>{product.id}</td>
-                  <td>{product.name}</td>
-                  <td>
-                    <input
-                      type="number"
-                      value={product.pricePerKg}
-                      className="form-control"
-                      style={{ minWidth: "60px" }}
-                      onChange={(e) =>
-                        handlePriceChange(
-                          product.id,
-                          parseFloat(e.target.value)
-                        )
-                      }
-                    />
-                  </td>
-                  <td>{price50g.toFixed(2)}</td>
-                  <td>{price100g.toFixed(2)}</td>
-                  <td>{finalPrice.toFixed(2)}</td>
-                  <td>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => deleteProduct(product.id)}
-                    >
-                      حذف
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <thead className="table-dark">
+          <tr>
+            <th>#</th>
+            <th>المنتج</th>
+            <th>سعر (1kg)</th>
+            <th>سعر (40g)</th> {/* Updated from 50g to 40g */}
+            <th>سعر (90g)</th> {/* Updated from 100g to 90g */}
+            <th>السعر النهائي</th>
+            <th>إجراء</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((product) => {
+            const { price40g, price90g, finalPrice } = calculatePrice(
+              product.pricePerKg
+            );
+            return (
+              <tr key={product.id}>
+                <td>{product.id}</td>
+                <td>{product.name}</td>
+                <td>
+                  <input
+                    type="number"
+                    value={product.pricePerKg}
+                    className="form-control"
+                    style={{ minWidth: "60px" }}
+                    onChange={(e) =>
+                      handlePriceChange(product.id, parseFloat(e.target.value))
+                    }
+                  />
+                </td>
+                <td>{price40g.toFixed(2)}</td> {/* Updated */}
+                <td>{price90g.toFixed(2)}</td> {/* Updated */}
+                <td>{finalPrice.toFixed(2)}</td>
+                <td>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => deleteProduct(product.id)}
+                  >
+                    حذف
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
       </div>
     </div>
   );
