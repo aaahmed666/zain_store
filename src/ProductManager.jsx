@@ -15,7 +15,7 @@ const ProductManager = () => {
 
   const [products, setProducts] = useState(initialProduct || initialProducts);
   const [bottlePrice, setBottlePrice] = useState(2.25);
-  const [stickerPrice, setStickerPrice] = useState(1.75);
+  const [stickerPrice, setStickerPrice] = useState(20 / 35);
   const [newProductName, setNewProductName] = useState("");
   const [newProductPrice, setNewProductPrice] = useState("");
 
@@ -32,52 +32,36 @@ const ProductManager = () => {
       pricePerKg: parseFloat(newProductPrice),
     };
 
-    const updatedProducts = [...products, newProduct];
-
-    setProducts(updatedProducts);
-    localStorage.setItem("products", JSON.stringify(updatedProducts));
+    setProducts([...products, newProduct]);
 
     setNewProductName("");
     setNewProductPrice("");
   };
 
   const handlePriceChange = (id, newPrice) => {
-    const updatedProducts = products.map((product) =>
-      product.id === id ? { ...product, pricePerKg: newPrice } : product
+    setProducts((prev) =>
+      prev.map((product) =>
+        product.id === id ? { ...product, pricePerKg: newPrice } : product
+      )
     );
-
-    setProducts(updatedProducts);
-    localStorage.setItem("products", JSON.stringify(updatedProducts));
   };
 
   const deleteProduct = (id) => {
-    const updatedProducts = products.filter((product) => product.id !== id);
-    setProducts(updatedProducts);
-    localStorage.setItem("products", JSON.stringify(updatedProducts));
+    setProducts((prev) => prev.filter((product) => product.id !== id));
   };
 
-  const roundToNearestHalf = (value) => {
-    return Math.ceil(value * 2) / 2; // Always rounds up to nearest 0.5
-  };
+  const roundToNearestHalf = (value) => Math.ceil(value * 2) / 2;
 
   const calculatePrice = (basePrice) => {
     const totalCost = basePrice + bottlePrice * 25 + stickerPrice * 25;
     const finalPricePerKg = roundToNearestHalf(totalCost * 1.25); // Adding 25% profit margin
 
-    // Prices with profit
-    const price40g = roundToNearestHalf((finalPricePerKg / 1000) * 40);
-    const price90g = roundToNearestHalf((finalPricePerKg / 1000) * 90);
-
-    // Prices without profit
-    const price50gNoProfit = roundToNearestHalf((totalCost / 1000) * 40);
-    const price90gNoProfit = roundToNearestHalf((totalCost / 1000) * 90);
-
     return {
-      price40g,
-      price90g,
+      price40g: roundToNearestHalf((finalPricePerKg / 1000) * 40),
+      price90g: roundToNearestHalf((finalPricePerKg / 1000) * 90),
       finalPrice: finalPricePerKg,
-      price50gNoProfit,
-      price90gNoProfit,
+      price50gNoProfit: (basePrice / 1000) * 40,
+      price90gNoProfit: (basePrice / 1000) * 90,
     };
   };
 
@@ -87,7 +71,7 @@ const ProductManager = () => {
         <img
           src={logo}
           alt="Zain Store Logo"
-          style={{ height: "120px", objectFit: "cover" }} // Reduced size for mobile
+          style={{ height: "120px", objectFit: "cover" }}
         />
         <h2 className="text-center my-3 my-md-0">ادارة المنتجات</h2>
         <button
@@ -108,7 +92,7 @@ const ProductManager = () => {
             type="number"
             value={bottlePrice}
             className="form-control"
-            onChange={(e) => setBottlePrice(parseFloat(e.target.value))}
+            onChange={(e) => setBottlePrice(parseFloat(e.target.value) || 0)}
           />
         </div>
         <div className="col-12 col-md-6">
@@ -117,7 +101,7 @@ const ProductManager = () => {
             type="number"
             value={stickerPrice}
             className="form-control"
-            onChange={(e) => setStickerPrice(parseFloat(e.target.value))}
+            onChange={(e) => setStickerPrice(parseFloat(e.target.value) || 0)}
           />
         </div>
       </div>
@@ -148,7 +132,6 @@ const ProductManager = () => {
         </div>
       </div>
 
-      {/* Table wrapper for mobile scrolling */}
       <div
         className="table-responsive"
         style={{ overflowX: "auto" }}
@@ -159,8 +142,8 @@ const ProductManager = () => {
               <th>#</th>
               <th>المنتج</th>
               <th>سعر (1kg)</th>
-              <th>سعر (40g بدون ربح)</th> {/* New column */}
-              <th>سعر (90g بدون ربح)</th> {/* New column */}
+              <th>سعر (40g بدون ربح)</th>
+              <th>سعر (90g بدون ربح)</th>
               <th>سعر (40g)</th>
               <th>سعر (90g)</th>
               <th>السعر النهائي</th>
@@ -189,13 +172,13 @@ const ProductManager = () => {
                       onChange={(e) =>
                         handlePriceChange(
                           product.id,
-                          parseFloat(e.target.value)
+                          parseFloat(e.target.value) || 0
                         )
                       }
                     />
                   </td>
-                  <td>{price50gNoProfit.toFixed(2)}</td> {/* New column */}
-                  <td>{price90gNoProfit.toFixed(2)}</td> {/* New column */}
+                  <td>{price50gNoProfit.toFixed(2)}</td>
+                  <td>{price90gNoProfit.toFixed(2)}</td>
                   <td>{price40g.toFixed(2)}</td>
                   <td>{price90g.toFixed(2)}</td>
                   <td>{finalPrice.toFixed(2)}</td>
