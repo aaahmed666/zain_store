@@ -15,7 +15,7 @@ const ProductManager = () => {
 
   const [products, setProducts] = useState(initialProduct || initialProducts);
   const [bottlePrice, setBottlePrice] = useState(2.25);
-  const [stickerPrice, setStickerPrice] = useState(20 / 35);
+  const [stickerPrice, setStickerPrice] = useState(1.75);
   const [newProductName, setNewProductName] = useState("");
   const [newProductPrice, setNewProductPrice] = useState("");
 
@@ -61,7 +61,7 @@ const ProductManager = () => {
   };
 
   const calculatePrice = (basePrice) => {
-    const totalCost = basePrice + bottlePrice + stickerPrice; // Base cost with additional costs
+    const totalCost = basePrice + bottlePrice * 25 + stickerPrice * 25; // Multiply by 25
     const finalPricePerKg = roundToNearestHalf(totalCost * 1.25); // Adding 25% profit margin and rounding
 
     const price40g = roundToNearestHalf((finalPricePerKg / 1000) * 40); // 40g with profit
