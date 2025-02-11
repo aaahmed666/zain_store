@@ -56,12 +56,16 @@ const ProductManager = () => {
     localStorage.setItem("products", JSON.stringify(updatedProducts));
   };
 
+  const roundToNearestHalf = (value) => {
+    return Math.ceil(value * 2) / 2; // Always rounds up to nearest 0.5
+  };
+
   const calculatePrice = (basePrice) => {
     const totalCost = basePrice + bottlePrice + stickerPrice; // Base cost with additional costs
-    const finalPricePerKg = totalCost * 1.25; // Adding 25% profit margin
+    const finalPricePerKg = roundToNearestHalf(totalCost * 1.25); // Adding 25% profit margin and rounding
 
-    const price40g = (finalPricePerKg / 1000) * 40; // 40g with profit
-    const price90g = (finalPricePerKg / 1000) * 90; // 90g with profit
+    const price40g = roundToNearestHalf((finalPricePerKg / 1000) * 40); // 40g with profit
+    const price90g = roundToNearestHalf((finalPricePerKg / 1000) * 90); // 90g with profit
 
     return { price40g, price90g, finalPrice: finalPricePerKg };
   };
