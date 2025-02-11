@@ -69,7 +69,7 @@ const ProductManager = () => {
     const price90g = roundToNearestHalf((finalPricePerKg / 1000) * 90);
 
     // Prices without profit
-    const price50gNoProfit = roundToNearestHalf((basePrice / 1000) * 50);
+    const price50gNoProfit = roundToNearestHalf((basePrice / 1000) * 40);
     const price90gNoProfit = roundToNearestHalf((basePrice / 1000) * 90);
 
     return {
@@ -159,7 +159,7 @@ const ProductManager = () => {
               <th>#</th>
               <th>المنتج</th>
               <th>سعر (1kg)</th>
-              <th>سعر (50g بدون ربح)</th> {/* New column */}
+              <th>سعر (40g بدون ربح)</th> {/* New column */}
               <th>سعر (90g بدون ربح)</th> {/* New column */}
               <th>سعر (40g)</th>
               <th>سعر (90g)</th>
