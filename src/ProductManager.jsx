@@ -50,6 +50,12 @@ const ProductManager = () => {
     localStorage.setItem("products", JSON.stringify(updatedProducts));
   };
 
+  const deleteProduct = (id) => {
+    const updatedProducts = products.filter((product) => product.id !== id);
+    setProducts(updatedProducts);
+    localStorage.setItem("products", JSON.stringify(updatedProducts));
+  };
+
   const calculatePrice = (basePrice) => {
     const price50g = (basePrice / 1000) * 50;
     const price100g = (basePrice / 1000) * 100;
@@ -139,6 +145,7 @@ const ProductManager = () => {
               <th>سعر (50g)</th>
               <th>سعر (100g)</th>
               <th>السعر النهائي</th>
+              <th>إجراء</th> {/* New column for actions */}
             </tr>
           </thead>
           <tbody>
@@ -167,6 +174,14 @@ const ProductManager = () => {
                   <td>{price50g.toFixed(2)}</td>
                   <td>{price100g.toFixed(2)}</td>
                   <td>{finalPrice.toFixed(2)}</td>
+                  <td>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => deleteProduct(product.id)}
+                    >
+                      حذف
+                    </button>
+                  </td>
                 </tr>
               );
             })}
