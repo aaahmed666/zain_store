@@ -155,7 +155,7 @@ const ProductManager = () => {
                       type="number"
                       value={product.pricePerKg}
                       className="form-control"
-                      style={{ minWidth: "60px" }} // Increased width
+                      style={{ minWidth: "60px" }}
                       onChange={(e) =>
                         handlePriceChange(
                           product.id,
