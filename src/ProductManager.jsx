@@ -69,8 +69,8 @@ const ProductManager = () => {
     const price90g = roundToNearestHalf((finalPricePerKg / 1000) * 90);
 
     // Prices without profit
-    const price50gNoProfit = roundToNearestHalf((basePrice / 1000) * 40);
-    const price90gNoProfit = roundToNearestHalf((basePrice / 1000) * 90);
+    const price50gNoProfit = roundToNearestHalf((totalCost / 1000) * 40);
+    const price90gNoProfit = roundToNearestHalf((totalCost / 1000) * 90);
 
     return {
       price40g,
